@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Contact Form</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: 50px auto; }
+    input, textarea { width: 100%; margin-bottom: 15px; padding: 10px; box-sizing: border-box; }
+    button { padding: 10px 20px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    #status { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h2>Contact Us</h2>
+  <form id="google-sheet-form">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+  <div id="status"></div>
+
+  <script>
+    const form = document.getElementById('google-sheet-form');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      status.innerText = "Submitting...";
+      
+      const data = new FormData(form);
+
+      // Replace this URL with your Web App URL from Step 3
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxsm6RvOZyfYZ49o3I695cCjYPLjO4hA5e1NWu1zOB8H9q_50cqzcSTOsmJeC8xFz_u/exec';
+
+      fetch(scriptURL, { method: 'POST', body: data })
+        .then(response => {
+          status.innerText = "Success! Your message was sent.";
+          status.style.color = "green";
+          form.reset();
+        })
+        .catch(error => {
+          status.innerText = "Error! Something went wrong.";
+          status.style.color = "red";
+          console.error('Error!', error.message);
+        });
+    });
+  </script>
+
+</body>
+</html>
